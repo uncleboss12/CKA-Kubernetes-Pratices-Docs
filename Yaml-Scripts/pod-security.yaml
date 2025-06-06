@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myapp
+  labels:
+    name: myapp
+spec:
+  securityContext:
+    runAsUser: 1000
+  containers:
+  - name: myapp
+    image: <Image>
+    ports:
+      - containerPort: 8080
+    securityContext:
+      capabilities:
+        add: ["NET_ADMIN", "SYS_TIME"]
+      privileged: true
+      allowPrivilegeEscalation: true
+      readOnlyRootFilesystem: false
+      runAsNonRoot: false

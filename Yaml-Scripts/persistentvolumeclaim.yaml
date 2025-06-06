@@ -1,0 +1,62 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: myapp-pvc
+  namespace: default
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: standard
+  volumeMode: Filesystem
+  selector:
+    matchLabels:
+      app: myapp
+      environment: production
+  volumeName: myapp-pv
+
+
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: webapp
+spec:
+  containers:
+    - name: event-simulator
+      image: kodekloud/event-simulator
+      volumeMounts:
+      - mountPath: /log
+        name: varlog
+  volumes:
+    - name: mypd
+      hostPath:
+        path: /var/log/webapp
+        type: Directory
+
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: nginx
+  name: nginx
+spec:
+  containers:
+  - image: nginx:alpine
+    name: nginx
+    volumeMounts:
+     - mountPath: /var/www/html
+       name: local-persistent-storage
+  volumes:
+   - name: local-persistent-storage
+     persistentVolumeClaim:
+        claimName: local-pvc
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}

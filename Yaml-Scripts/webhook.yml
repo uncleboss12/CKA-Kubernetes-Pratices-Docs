@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: red
+  labels:
+    app: red
+    type: nginx
+    node-role.kubernetes.io/control-plane: controlplane 
+spec:
+  template:
+    metadata:
+      labels:
+        type: nginx
+    spec:
+      containers:
+      - name: red
+        image: nginx
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+      affinity:                # Changed: moved nodeAffinity under affinity
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: node-:wrole.kubernetes.io/control-plane
+                operator: Equal
+                values:
+                - controlplane
+  replicas: 2
+  selector:
+    matchLabels:
+      type: nginx

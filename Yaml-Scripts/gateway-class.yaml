@@ -1,0 +1,27 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: GatewayClass
+metadata:
+  name: ingress-nginx-gateway
+  namespace: ingress-nginx
+spec: 
+  controllerName: ingress-nginx-controller
+  parametersRef:
+    group: networking.k8s.io
+    kind: IngressClassParameters
+    name: ingress-nginx-params
+  allowCrossNamespaceReference: true
+
+
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: GatewayClass
+metadata:
+  name: nginx
+  namespace: nginx-gateway
+spec: 
+  controllerName: gateway-controller
+  parametersRef:
+    group: networking.k8s.io
+    kind: IngressClassParameters
+    name: ingress-nginx-params
+  allowCrossNamespaceReference: true

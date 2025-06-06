@@ -1,0 +1,15 @@
+bases: 
+  - ../../base
+resources:
+  - deployment.yaml
+  - service.yaml
+  - ingress.yaml
+
+patches:
+  - target:
+      name: nginx-ingress-controller
+      kind: Deployment
+    patch: |-
+      - op: add
+        path: /metadata/name
+        value: -mandown

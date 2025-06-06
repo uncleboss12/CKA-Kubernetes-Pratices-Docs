@@ -1,0 +1,37 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
+kind: Kustomization
+resources:
+  - ./nginx-deployment.yaml
+  - ./nginx-service.yaml
+  - ./nginx-configmap.yaml
+  - ./nginx-ingress.yaml
+  - ./nginx-serviceaccount.yaml
+  - ./nginx-clusterrole.yaml
+  - ./nginx-clusterrolebinding.yaml
+  - ./nginx-role.yaml
+  - ./nginx-rolebinding.yaml
+  - ./nginx-validatingwebhookconfiguration.yaml
+  - ./nginx-admission-webhook.yaml
+commonLabels:
+  app: nginx-ingress-controller
+commonAnnotations:
+  app: nginx-ingress-controller
+  version: v1.0.0
+  environment: production
+  description: "This is a kustomization for the NGINX Ingress Controller"
+namePrefix:
+  name: nginx-ingress-controller
+nameSuffix:
+  name: -v1.0.0
+namespace:
+  name: nginx-gateway
+  labels:
+    app: nginx-gateway
+    version: v1.0.0
+
+images:
+  - name: nginx-ingress-controller
+    newName: nginx-ingress-controller
+    newTag: v1.0.0S
+  
+   

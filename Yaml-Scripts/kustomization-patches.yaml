@@ -1,0 +1,83 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
+kind: Kustomization
+
+resources:
+
+patches:
+  - target:
+      name: nginx-ingress-controller
+      kind: Deployment
+    patch: |-
+     - op: replace
+       path: /spec/template/spec/containers/0/image
+       value: nginx-ingress-controller:v1.0.0
+      
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
+kind: Kustomization
+
+resources:
+
+patches:
+  - target:
+      name: nginx-ingress-controller
+      kind: Deployment
+    patch: |-
+     - op: add
+       path: /metadata/name
+       value: -mandown 
+
+
+---
+
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
+kind: Kustomization
+
+resources:
+
+patches:
+  - patch: |-
+      apiVersion: networking.k8s.io/v1
+      kind: Ingress   
+      metadata:
+        name: pay-service
+        namespace: critical-space
+        annotations:
+          nginx.ingress.kubernetes.io/rewrite-target: /
+          nginx.ingress.kubernetes.io/ssl-redirect: "false"
+
+---
+# patch dictionary
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
+kind: Kustomization
+
+resources:
+
+patches:
+  - target:
+      name: pay-service-route
+      kind: HTTPRoute
+    patch: |-
+     - op: replace
+       path: /metadata/name
+       value: -mandown
+
+
+---
+# patch list
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
+kind: Kustomization
+
+resources:
+
+patches:
+  - target:
+      name: pay-service-route
+      kind: HTTPRoute
+    patch: |-
+     - op: replace
+       path: /spec/template/spec/containers/0/
+       value: 
+         name: haproxy
+         image: haproxy:2.4
+

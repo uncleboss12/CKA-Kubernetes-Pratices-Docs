@@ -1,0 +1,11 @@
+apiServer: v1
+kind: Pod
+metadata:
+  name: justine-pod
+  labels:
+    app: justine-app
+    type: backend
+spec:
+  containers:
+  - name: nginx-container
+    image: nginx

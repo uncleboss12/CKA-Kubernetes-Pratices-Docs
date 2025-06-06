@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-with-override
+  labels:
+    name: myapp
+spec:
+  restartPolicy: OnFailure
+  securityContext:
+    runAsNonRoot: false
+    runAsUser: 0
+  containers:
+  - name: myapp
+    image: <Image>
+    command: ["sh", "-c", "echo Hello, Kubernetes! && sleep 3600"]

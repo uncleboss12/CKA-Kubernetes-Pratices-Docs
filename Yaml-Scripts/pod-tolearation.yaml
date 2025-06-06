@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Node
+metadata:
+  name: node01
+spec:
+  containers:
+  - name: toleartion-container
+    image: nginx
+  tolerations:
+  - key: "spray"
+    operator: "Equal"
+    value: "value"
+    effect: "NoSchedule"
+
+
+

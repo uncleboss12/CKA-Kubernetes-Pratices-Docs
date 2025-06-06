@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: private-docker-image-pod
+  namespace: default
+spec:
+  containers:
+    - name: private-docker-image-container
+      image: private-registry.io/apps/internal-apps/private-image:latest
+    - name: myregistrykey
+  restartPolicy: Always
